@@ -1,0 +1,49 @@
+version: '2.29.6'
+
+services:
+  db:
+    image: postgres:17
+    container_name: db_app
+    command: -p 1221
+    expose:
+      - 1221
+    env_file:
+      - .env
+
+  redis:
+    image: redis:7.4
+    container_name: redis_app
+
+  app:
+    build:
+      context: .
+    env_file:
+      - .env
+    container_name: neuron_app
+    command: ["/neuron_app/docker/app.sh"]
+    ports:
+      - 9999:8000
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build:
+      context: .
+    env_file:
+      - .env
+    container_name: celery_app
+    command: ["neuron_app/docker/celery.sh", "celery"]
+    depends_on:
+      - redis
+
+  flower:
+    build:
+      context: .
+    container_name: flower_app
+    command: ["/neuron_app/docker/celery.sh", "flower"]
+    depends_on:
+      - redis
+      - celery
+    ports:
+      - 8888:5555
