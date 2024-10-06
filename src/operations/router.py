@@ -36,4 +36,3 @@ async def add_specific_operations(new_operation: OperationCreate, session: Async
     await session.execute(stmt) # обновляем информацию в таблице и отображает логи
     await session.commit() # исполнить
     return {"status": "success"}
-
