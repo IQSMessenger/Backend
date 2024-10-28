@@ -39,7 +39,7 @@ app.include_router(router_chat)
 
 # адреса фронтов котрые имеют доступ к бекенду
 origins = [
-    "http://localhost:8080",
+    "http://localhost:80",
 ]
 
 # добавление корс миделвара
